@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .product-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .product-desc {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .price {
+            margin: 10px 0;
+            font-size: 17px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 900px) {
+            .product-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Our Products</h2>
+
+    <div class="product-container">
+
+        <div class="product-card">
+            <a href="{% url 'single_product' 1 %}"><img src="{% static 'dress/dress1.jpeg' %}" alt=""></a>
+            <div class="product-name">Formal Shirts</div>
+            <div class="product-desc">Formal Full sleve Shirts for men.</div>
+            <div class="price">₹800</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <a href="{% url 'single_product' 2 %}"><img src="{% static 'dress/dress2.jpeg' %}" alt=""></a>
+            <div class="product-name">Brasil jersey</div>
+            <div class="product-desc">Brasil jersey nilon</div>
+            <div class="price">₹500</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+
+
+        <div class="product-card">
+            <a href="{% url 'single_product' 3 %}"><img src="{% static 'dress/dress3.jpeg' %}" alt=""></a>
+            <div class="product-name">White shirt & green pant</div>
+            <div class="product-desc">White shirt & green pant casual fasion </div>
+            <div class="price">₹1600</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+
+
+    </div>
+
+</body>
+</html>

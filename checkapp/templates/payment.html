@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Subscription</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+
+
+
+
+
+
+
+
+
+
+
+        body {
+            background-color: #f7f7f7;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+
+
+
+
+
+        
+        .payment-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        
+        .header-section {
+            margin-bottom: 40px;
+        }
+        
+        .brand-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 30px;
+        }
+        
+        .back-arrow {
+            color: #666;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        
+        .subscription-title {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #000;
+        }
+        
+        .price-label {
+            font-size: 14px;
+            color: #666;
+            margin-left: 5px;
+        }
+        
+        .left-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .right-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .line-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .line-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-name {
+            font-size: 15px;
+            color: #000;
+        }
+        
+        .item-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        .item-price {
+            font-size: 15px;
+            color: #000;
+            font-weight: 500;
+        }
+        
+        .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e5e5;
+        }
+        
+        .total-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+        }
+        
+        .total-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            font-size: 14px;
+        }
+        
+        .form-control:focus {
+            border-color: #10a37f;
+            box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+        }
+        
+        .payment-option {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .payment-option:hover {
+            border-color: #10a37f;
+            background-color: #f9fafb;
+        }
+        
+        .payment-option.selected {
+            border-color: #10a37f;
+            background-color: #f0fdf9;
+        }
+        
+        .payment-option input[type="radio"] {
+            margin-right: 12px;
+            cursor: pointer;
+        }
+        
+        .payment-icons {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+        
+        .payment-icons i {
+            font-size: 24px;
+        }
+        
+        .fa-cc-visa { color: #1434CB; }
+        .fa-cc-mastercard { color: #EB001B; }
+        .fa-cc-amex { color: #006FCF; }
+        .fa-cc-discover { color: #FF6000; }
+        
+        .subscribe-btn {
+            background-color: #10a37f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 20px;
+        }
+        
+        .subscribe-btn:hover {
+            background-color: #0d8f6f;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            margin: 20px 0;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+            margin-top: 3px;
+            cursor: pointer;
+        }
+        
+        .checkbox-label {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .checkbox-label a {
+            color: #10a37f;
+            text-decoration: underline;
+        }
+        
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .footer-text a {
+            color: #666;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        
+        .info-icon {
+            color: #999;
+            font-size: 12px;
+            cursor: help;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="header-section">
+            <div class="brand-name">
+                <a href="#" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
+                Shopcart
+            
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="left-panel">
+                    <div class="subscription-title">Total amount</div>
+                    <div class="d-flex align-items-baseline">
+                        <span class="price">₹399.00</span>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="line-item">
+                            <div>
+                                <div class="item-subtitle">Other Charges</div>
+                            </div>
+                            <div class="item-price">₹00+</div>
+                        </div>
+                        
+                        <div class="line-item">
+                            <div>
+                                <div class="item-name">Subtotal</div>
+                            </div>
+                            <div class="item-price">₹399.00</div>
+                        </div>
+                        
+                        <div class="line-item">
+                            <div>
+                                <div class="item-name">Tax <i class="fas fa-info-circle info-icon"></i></div>
+                            </div>
+                            <div class="item-price" style="color: #999;">Enter address to calculate</div>
+                        </div>
+                        
+                        <div class="line-item total-section">
+                            <div class="total-label">Total </div>
+                            <div class="total-amount">₹399.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="right-panel">
+                    <div class="section-title">Contact information</div>
+                    <div class="mb-4">
+                        <label class="form-label" style="font-size: 14px; color: #374151; font-weight: 500;">Email</label>
+                        <input type="email" class="form-control"  required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" style="font-size: 14px; color: #374151; font-weight: 500;">Phone Number</label>
+                        <input type="email" class="form-control" required>
+                    </div>                   
+                    <div class="section-title mt-4">Payment method</div>
+                    
+                    <div class="payment-option selected">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment" id="card" checked>
+                            <label for="card" class="mb-0" style="cursor: pointer; flex: 1;">
+                                <i class="fas fa-credit-card me-2"></i> Card
+                            </label>
+                            <div class="payment-icons">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-amex"></i>
+                                <i class="fab fa-cc-discover"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-option">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment" id="upi">
+                            <label for="upi" class="mb-0" style="cursor: pointer;">
+                                <i class="fas fa-mobile-alt me-2"></i> UPI
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="save-info">
+                        <label for="save-info" class="checkbox-label">
+                            Save my information for faster checkout<br>
+                            Pay securely at MyCompany, LLC and everywhere <a href="#">Link</a> is accepted.
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" class="checkbox-label">
+                            You'll be charged the amount and at the frequency listed above until you cancel. We may change our prices as described in our <a href="#">Terms of Use</a>. You can <a href="#">cancel any time</a>. By subscribing, you agree to MyCompany's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>, and you authorize us to store your payment method for renewals and other purchases.
+                        </label>
+                    </div>
+                    
+                    <button class="subscribe-btn">Proceed</button>
+                    
+                    <div class="footer-text">
+                        Powered by <strong>stripe</strong>
+                        <a href="#">Terms</a>
+                        <a href="#">Privacy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script>
+        // Handle payment option selection
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+        
+        // Handle subscribe button
+        document.querySelector('.subscribe-btn').addEventListener('click', function() {
+            const termsChecked = document.getElementById('terms').checked;
+            if (!termsChecked) {
+                alert('Please agree to the terms and conditions');
+                return;
+            }
+            alert('Subscription processed successfully!');
+        });
+    </script> -->
+</body>
+</html>

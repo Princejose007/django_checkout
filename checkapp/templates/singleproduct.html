@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Product Page</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f7f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .product-wrapper {
+            display: flex;
+            gap: 40px;
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .product-wrapper img {
+            width: 420px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .product-description {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 26px;
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .qty-box {
+            width: 70px;
+            padding: 8px;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: #007bff;
+            color: #fff;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .product-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .product-wrapper img {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="product-wrapper">
+        <img src="{{single_data.image.url}}" alt="{{single_data.name}} ">
+
+        <div class="product-info">
+            <div class="product-title">{{single_data.name}}</div>
+            <div class="product-description">
+                {{single_data.description}}
+            </div>
+
+            <div class="price">{{single_data.price}}</div>
+
+            <!-- <label for="qty">Quantity:</label> -->
+            <!-- <br>
+            <input type="number" id="qty" class="qty-box" value="1" min="1">
+
+            <br><br> -->
+             <a href="{% url 'add_to_cart' single_data.id %}">
+            <button class="btn">Add to Cart</button></a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .cart-container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .item-price, .item-total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .qty-box {
+            width: 60px;
+            padding: 6px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .remove-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .checkout-section {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+            text-align: right;
+        }
+
+        .checkout-total {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .checkout-btn:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 700px) {
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cart-item img {
+                width: 100%;
+                height: auto;
+            }
+
+            .checkout-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Your Cart</h2>
+
+    <div class="cart-container">
+
+        {% for item in cart_items %}
+        <div class="cart-item">
+            <!-- Product Image -->
+            <img src="{{ item.cartproduct.image.url }}" alt="{{ item.cartproduct.name }}">
+
+            <!-- Product Details -->
+            <div class="item-details">
+                <div class="item-title">{{ item.cartproduct.name }}</div>
+                <div class="item-price">Price: ₹{{ item.cartproduct.price }}</div>
+            </div>
+
+            <!-- Quantity Update Form -->
+            <form action="{% url 'cart_update' item.id %}" method="POST">
+                {% csrf_token %}
+                Qty: <br>
+                <input
+                    type="number"
+                    name="quantity"
+                    class="qty-box"
+                    value="{{ item.quantity }}"
+                    min="1"
+                    onchange="this.form.submit()"
+                >
+            </form>
+
+            <!-- Per-item total (if you use a total_cost property/field) -->
+            <div class="item-total">₹{{ item.total_cost }}</div>
+
+            <!-- Remove from cart -->
+            <a href="{% url 'remove_cart' item.id %}" class="remove-btn">Remove</a>
+        </div>
+        {% empty %}
+            <h3>Your cart is empty</h3>
+        {% endfor %}
+
+        <!-- Checkout Section -->
+        <div class="checkout-section">
+            <div class="checkout-total">Total: ₹{{ total_amount }}</div>
+            <button class="checkout-btn">
+                <a href="{% url 'checkout' %}">Proceed to Checkout</a></button>
+        </div>
+
+    </div>
+
+</body>
+</html>
