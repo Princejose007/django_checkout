@@ -1,418 +1,89 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Checkout - EliteStore</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* (your stylesheet kept exactly as before) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #fafafa;
-            color: #1d1d1f;
-            line-height: 1.6;
+            background: #fafafa; color: #1d1d1f; line-height: 1.6;
         }
 
-        .progress-steps {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem 0;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .progress-steps { display: flex; justify-content: center; align-items: center; padding: 2rem 0; max-width: 600px; margin: 0 auto; }
+        .step { display: flex; align-items: center; position: relative; }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 2px solid #d2d2d7; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem; color: #86868b; transition: all 0.3s; }
+        .step.active .step-circle { background: #0071e3; border-color: #0071e3; color: #fff; }
+        .step.completed .step-circle { background: #34c759; border-color: #34c759; color: #fff; }
+        .step-line { width: 120px; height: 2px; background: #d2d2d7; margin: 0 1rem; }
+        .step.completed + .step .step-line { background: #34c759; }
 
-        .step {
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-
-        .step-circle {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #fff;
-            border: 2px solid #d2d2d7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.875rem;
-            color: #86868b;
-            transition: all 0.3s;
-        }
-
-        .step.active .step-circle {
-            background: #0071e3;
-            border-color: #0071e3;
-            color: #fff;
-        }
-
-        .step.completed .step-circle {
-            background: #34c759;
-            border-color: #34c759;
-            color: #fff;
-        }
-
-        .step-line {
-            width: 120px;
-            height: 2px;
-            background: #d2d2d7;
-            margin: 0 1rem;
-        }
-
-        .step.completed + .step .step-line {
-            background: #34c759;
-        }
-
-        .checkout-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .section-card {
-            background: #fff;
-            border-radius: 18px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .section-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-number {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #0071e3;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            margin-right: 1rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0;
-            flex: 1;
-        }
-
-        .change-btn {
-            background: none;
-            border: none;
-            color: #0071e3;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .change-btn:hover {
-            opacity: 0.7;
-        }
-
-        .product-item {
-            display: flex;
-            gap: 1.5rem;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid #f5f5f7;
-        }
-
-        .product-item:last-child {
-            border-bottom: none;
-        }
-
-        .product-image {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            background: #f5f5f7;
-        }
-
-        .product-details {
-            flex: 1;
-        }
-
-        .product-name {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-meta {
-            color: #86868b;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-price {
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .qty-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid #d2d2d7;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .qty-btn:hover {
-            background: #f5f5f7;
-        }
-
-        .qty-value {
-            min-width: 40px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .remove-btn {
-            color: #1e1717;
-            background: none;
-            border: none;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .remove-btn:hover {
-            opacity: 0.7;
-        }
-
-        .address-card {
-            background: #f5f5f7;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .address-name {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .address-badge {
-            display: inline-block;
-            background: #0071e3;
-            color: #fff;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            margin-left: 0.5rem;
-        }
-
-        .address-details {
-            color: #1d1d1f;
-            line-height: 1.6;
-        }
-
-        .deliver-btn {
-            background: #394cb4;
-            color: #fff;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            margin-top: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .deliver-btn:hover {
-            background: #191615;
-        }
-
-        .summary-card {
-            position: sticky;
-            top: 100px;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            font-size: 0.9375rem;
-        }
-
-        .summary-row.total {
-            font-size: 1.5rem;
-            font-weight: 600;
-            padding-top: 1rem;
-            border-top: 1px solid #d2d2d7;
-            margin-top: 1rem;
-        }
-
-        .savings {
-            color: #34c759;
-            font-weight: 600;
-            font-size: 0.9375rem;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            background: #1d1d1f;
-            color: #fff;
-            border: none;
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .checkout-btn:hover {
-            background: #000;
-        }
-
-        .continue-shopping {
-            width: 100%;
-            background: #fff;
-            color: #0071e3;
-            border: 1px solid #0071e3;
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .continue-shopping:hover {
-            background: #f5f5f7;
-        }
-
-        .trust-badges {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .trust-item {
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .trust-icon {
-            font-size: 2.5rem;
-            color: #0071e3;
-            margin-bottom: 0.75rem;
-        }
-
-        .trust-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            font-size: 0.875rem;
-        }
-
-        .trust-desc {
-            color: #86868b;
-            font-size: 0.8125rem;
-            line-height: 1.4;
-        }
-
-        .info-box {
-            background: #f5f5f7;
-            border-radius: 12px;
-            padding: 1rem;
-            display: flex;
-            align-items: start;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .info-icon {
-            color: #0071e3;
-            font-size: 1.25rem;
-            margin-top: 0.125rem;
-        }
-
-        .info-text {
-            font-size: 0.875rem;
-            color: #1d1d1f;
-        }
-
+        .checkout-container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+        .section-card { background: #fff; border-radius: 18px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; }
+        .section-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+        .section-number { width: 32px; height: 32px; border-radius: 50%; background: #0071e3; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; margin-right: 1rem; }
+        .section-title { font-size: 1.5rem; font-weight: 600; margin: 0; flex: 1; }
+        .change-btn { background: none; border: none; color: #0071e3; font-size: 0.875rem; cursor: pointer; transition: opacity 0.3s; }
+        .change-btn:hover { opacity: 0.7; }
+        .product-item { display: flex; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid #f5f5f7; }
+        .product-item:last-child { border-bottom: none; }
+        .product-image { width: 120px; height: 120px; object-fit: cover; border-radius: 12px; background: #f5f5f7; }
+        .product-details { flex: 1; }
+        .product-name { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .product-meta { color: #86868b; font-size: 0.875rem; margin-bottom: 0.5rem; }
+        .product-price { font-size: 1rem; font-weight: 500; margin-bottom: 1rem; }
+        .quantity-control { display: flex; align-items: center; gap: 1rem; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #d2d2d7; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
+        .qty-btn:hover { background: #f5f5f7; }
+        .qty-value { min-width: 40px; text-align: center; font-weight: 500; }
+        .remove-btn { color: #1e1717; background: none; border: none; font-size: 0.875rem; cursor: pointer; transition: opacity 0.3s; }
+        .remove-btn:hover { opacity: 0.7; }
+        .address-card { background: #f5f5f7; border-radius: 12px; padding: 1.5rem; margin-top: 1rem; }
+        .address-name { font-weight: 600; margin-bottom: 0.5rem; }
+        .address-badge { display: inline-block; background: #0071e3; color: #fff; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; margin-left: 0.5rem; }
+        .address-details { color: #1d1d1f; line-height: 1.6; }
+        .deliver-btn { background: #394cb4; color: #fff; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; margin-top: 1rem; cursor: pointer; transition: background 0.3s; }
+        .deliver-btn:hover { background: #191615; }
+        .summary-card { position: sticky; top: 100px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9375rem; }
+        .summary-row.total { font-size: 1.5rem; font-weight: 600; padding-top: 1rem; border-top: 1px solid #d2d2d7; margin-top: 1rem; }
+        .savings { color: #34c759; font-weight: 600; font-size: 0.9375rem; }
+        .checkout-btn { width: 100%; background: #1d1d1f; color: #fff; border: none; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 600; margin-bottom: 1rem; cursor: pointer; transition: background 0.3s; }
+        .checkout-btn:hover { background: #000; }
+        .continue-shopping { width: 100%; background: #fff; color: #0071e3; border: 1px solid #0071e3; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .continue-shopping:hover { background: #f5f5f7; }
+        .trust-badges { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem; }
+        .trust-item { text-align: center; padding: 1rem; }
+        .trust-icon { font-size: 2.5rem; color: #0071e3; margin-bottom: 0.75rem; }
+        .trust-title { font-weight: 600; margin-bottom: 0.25rem; font-size: 0.875rem; }
+        .trust-desc { color: #86868b; font-size: 0.8125rem; line-height: 1.4; }
+        .info-box { background: #f5f5f7; border-radius: 12px; padding: 1rem; display: flex; align-items: start; gap: 0.75rem; margin-top: 1rem; }
+        .info-icon { color: #0071e3; font-size: 1.25rem; margin-top: 0.125rem; }
+        .info-text { font-size: 0.875rem; color: #1d1d1f; }
         @media (max-width: 768px) {
-            .checkout-container {
-                padding: 0 1rem;
-            }
-
-            .section-card {
-                padding: 1.5rem;
-            }
-
-            .product-item {
-                flex-direction: column;
-            }
-
-            .product-image {
-                width: 100%;
-                height: 200px;
-            }
-
-            .trust-badges {
-                grid-template-columns: 1fr;
-            }
-
-            .step-line {
-                width: 60px;
-            }
+            .checkout-container { padding: 0 1rem; }
+            .section-card { padding: 1.5rem; }
+            .product-item { flex-direction: column; }
+            .product-image { width: 100%; height: 200px; }
+            .trust-badges { grid-template-columns: 1fr; }
+            .step-line { width: 60px; }
         }
     </style>
 </head>
 <body>
     <!-- Progress Steps -->
     <div class="progress-steps">
-        <div class="step completed">
-            <div class="step-circle"><i class="fas fa-check"></i></div>
-        </div>
+        <div class="step completed"><div class="step-circle"><i class="fas fa-check"></i></div></div>
         <div class="step-line"></div>
-        <div class="step active">
-            <div class="step-circle">2</div>
-        </div>
+        <div class="step active"><div class="step-circle">2</div></div>
         <div class="step-line"></div>
-        <div class="step">
-            <div class="step-circle">3</div>
-        </div>
+        <div class="step"><div class="step-circle">3</div></div>
     </div>
 
     <div class="checkout-container">
@@ -443,7 +114,7 @@
                             <div class="section-number">2</div>
                             <h2 class="section-title">Delivery Address</h2>
                         </div>
-                        <button class="change-btn" id="addressChangeBtn">CHANGE</button>
+                        <button class="change-btn" id="addressChangeBtn" data-bs-toggle="modal" data-bs-target="#editAddressModal">CHANGE</button>
                     </div>
                     <div class="address-card">
                         <div class="address-name">
@@ -457,7 +128,7 @@
                         <p class="mb-0"><strong id="displayAddrPhone">8590360275</strong></p>
                         <button class="deliver-btn">DELIVER HERE</button>
                     </div>
-                    <button class="change-btn mt-3">
+                    <button class="change-btn mt-3" data-bs-toggle="modal" data-bs-target="#editAddressModal">
                         <i class="fas fa-plus"></i> Add a new address
                     </button>
                 </div>
@@ -474,17 +145,27 @@
                     {% if cart_items %}
                         {% for item in cart_items %}
                         <div class="product-item">
-                            <img src="https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=400"
-                                 alt="{{ item.product.name }}" class="product-image">
+                            {# Try common image fields. Replace if your model uses a different field. #}
+                            {% if item.cartproduct.image %}
+                                <img src="{{ item.cartproduct.image.url }}" alt="{{ item.cartproduct.name }}" class="product-image">
+                            {% elif item.cartproduct.product and item.cartproduct.product.image %}
+                                <img src="{{ item.cartproduct.product.image.url }}" alt="{{ item.cartproduct.name }}" class="product-image">
+                            {% elif item.cartproduct.product_image %}
+                                <img src="{{ item.cartproduct.product_image.url }}" alt="{{ item.cartproduct.name }}" class="product-image">
+                            {% else %}
+                                <img src="{% static 'images/placeholder-400x400.png' %}" alt="{{ item.cartproduct.name }}" class="product-image">
+                            {% endif %}
+
                             <div class="product-details">
-                                <h3 class="product-name">{{ item.product.name }}</h3>
-                                <p class="product-meta">Qty: {{ item.quantity }}</p>
-                                <p class="product-price">₹ {{ item.product.price|floatformat:2 }}</p>
+                                <h3 class="product-name">{{ item.cartproduct.name }}</h3>
+                                <p class="product-meta">Qty: <span class="qty-value">{{ item.quantity }}</span></p>
+                                <p class="product-price">₹ {{ item.cartproduct.price|floatformat:2 }}</p>
+
                                 <div class="quantity-control">
-                                    <button class="qty-btn"><i class="fas fa-minus"></i></button>
+                                    <button class="qty-btn qty-decrease" type="button"><i class="fas fa-minus"></i></button>
                                     <span class="qty-value">{{ item.quantity }}</span>
-                                    <button class="qty-btn"><i class="fas fa-plus"></i></button>
-                                    <button class="remove-btn"><i class="fas fa-trash"></i> REMOVE</button>
+                                    <button class="qty-btn qty-increase" type="button"><i class="fas fa-plus"></i></button>
+                                    <button class="remove-btn" type="button"><i class="fas fa-trash"></i> REMOVE</button>
                                 </div>
                             </div>
                         </div>
@@ -492,7 +173,7 @@
 
                         <div class="summary-row total">
                             <span>Items Total</span>
-                            <span>₹ {{ cart_total|floatformat:2 }}</span>
+                            <span>₹ {{ total_price|floatformat:2 }}</span>
                         </div>
                     {% else %}
                         <p>Your cart is empty.</p>
@@ -538,15 +219,15 @@
 
                     <div class="summary-row">
                         <span>Order Total</span>
-                        <span>₹ {{ cart_total|floatformat:2 }}</span>
+                        <span>₹ {{ total_price|floatformat:2 }}</span>
                     </div>
 
                     <div class="summary-row total">
                         <span>Total Payable</span>
-                        <span>₹ {{ cart_total|floatformat:2 }}</span>
+                        <span>₹ {{ total_price|floatformat:2 }}</span>
                     </div>
 
-                    <button class="checkout-btn">
+                    <button class="checkout-btn" id="checkoutSecureBtn">
                         <i class="fas fa-lock me-2"></i>CHECKOUT SECURELY
                     </button>
 
@@ -574,20 +255,34 @@
       </div>
     </div>
 
-    <!-- EDIT ADDRESS MODAL -->
+    <!-- EDIT ADDRESS MODAL (client-only save; real POST happens on Checkout click) -->
     <div class="modal fade" id="editAddressModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content p-3" style="border-radius: 16px;">
           <h5 class="mb-3">Edit Delivery Address</h5>
 
-          <input type="text" id="addrName" class="form-control mb-2" placeholder="Full Name" />
-          <textarea id="addrDetails" class="form-control mb-2" rows="3" placeholder="Address"></textarea>
-          <input type="text" id="addrPhone" class="form-control mb-3" placeholder="Phone" />
+          <!-- client-only form: does not post by itself -->
+          <form id="addressModalForm" onsubmit="return false;">
+            {% csrf_token %}
+            <input type="text" name="Full_name" id="addrName" class="form-control mb-2" placeholder="Full Name" required />
+            <textarea name="Address" id="addrDetails" class="form-control mb-2" rows="3" placeholder="Address" required></textarea>
+            <input type="text" name="phone_number" id="addrPhone" class="form-control mb-3" placeholder="Phone" required />
 
-          <button class="btn btn-dark w-100" id="saveAddressBtn" type="button">Save</button>
+            <!-- type=button so it doesn't submit the page -->
+            <button class="btn btn-dark w-100" id="saveAddressBtn" type="button">Save</button>
+          </form>
         </div>
       </div>
     </div>
+
+    {# Hidden form: actual POST to checkout view. It will be submitted when user clicks CHECKOUT SECURELY #}
+    <form id="realCheckoutForm" method="post" action="{% url 'checkout' %}" style="display:none;">
+      {% csrf_token %}
+      <input type="hidden" name="Full_name" id="hidden_Full_name" value="">
+      <input type="hidden" name="Address" id="hidden_Address" value="">
+      <input type="hidden" name="phone_number" id="hidden_phone_number" value="">
+      {# Add other hidden inputs if your checkout view expects them (coupon, shipping method etc) #}
+    </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -609,8 +304,10 @@
             editPhoneModal.hide();
         });
 
-        // ------------ ADDRESS EDIT ------------
-        const addressChangeBtn = document.querySelector('#addressChangeBtn');
+        // ------------ ADDRESS EDIT & HIDDEN-FORM LOGIC ------------
+        const editAddressModalEl = document.querySelector('#editAddressModal');
+        const editAddressModal = new bootstrap.Modal(editAddressModalEl);
+
         const displayName = document.querySelector('#displayName');
         const displayAddress = document.querySelector('#displayAddress');
         const displayAddrPhone = document.querySelector('#displayAddrPhone');
@@ -619,39 +316,86 @@
         const addrDetailsInput = document.querySelector('#addrDetails');
         const addrPhoneInput = document.querySelector('#addrPhone');
         const saveAddressBtn = document.querySelector('#saveAddressBtn');
-        const editAddressModalEl = document.querySelector('#editAddressModal');
-        const editAddressModal = new bootstrap.Modal(editAddressModalEl);
 
-        addressChangeBtn.addEventListener('click', () => {
-            // Fill current values into modal
-            addrNameInput.value = displayName.textContent.trim();
-            const addrText = displayAddress.innerHTML.replace(/<br\s*\/?>/gi, '\n');
-            addrDetailsInput.value = addrText.trim();
-            addrPhoneInput.value = displayAddrPhone.textContent.trim();
-            editAddressModal.show();
+        const hiddenFullName = document.querySelector('#hidden_Full_name');
+        const hiddenAddress = document.querySelector('#hidden_Address');
+        const hiddenPhone = document.querySelector('#hidden_phone_number');
+        const realCheckoutForm = document.querySelector('#realCheckoutForm');
+        const checkoutSecureBtn = document.querySelector('#checkoutSecureBtn');
+
+        // Prefill modal when opened (for both CHANGE and Add new address buttons)
+        document.querySelectorAll('[data-bs-target="#editAddressModal"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                addrNameInput.value = displayName.textContent.trim();
+                const addrText = displayAddress.innerHTML.replace(/<br\s*\/?>/gi, '\n');
+                addrDetailsInput.value = addrText.trim();
+                addrPhoneInput.value = displayAddrPhone.textContent.trim();
+                editAddressModal.show();
+            });
         });
 
-        saveAddressBtn.addEventListener('click', () => {
-            displayName.textContent = addrNameInput.value.trim();
-            displayAddress.innerHTML = addrDetailsInput.value.trim().replace(/\n/g, '<br>');
-            displayAddrPhone.textContent = addrPhoneInput.value.trim();
+        // Save in modal updates visible UI and hidden fields (no POST here)
+        saveAddressBtn.addEventListener('click', function () {
+            const newName = addrNameInput.value.trim();
+            const newAddress = addrDetailsInput.value.trim();
+            const newPhone = addrPhoneInput.value.trim();
+
+            if (newName) displayName.textContent = newName;
+            if (newAddress) displayAddress.innerHTML = newAddress.replace(/\n/g, '<br>');
+            if (newPhone) displayAddrPhone.textContent = newPhone;
+
+            // Update hidden checkout form with latest values
+            hiddenFullName.value = displayName.textContent.trim();
+            // keep newline representation in hidden field if needed by server; we set plain text
+            hiddenAddress.value = displayAddress.innerText.trim();
+            hiddenPhone.value = displayAddrPhone.textContent.trim();
+
             editAddressModal.hide();
         });
 
-        // ------------ QTY + REMOVE (front-end only) ------------
-        document.querySelectorAll('.qty-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const parent = this.closest('.quantity-control');
-                const qtyValue = parent.querySelector('.qty-value');
-                let currentQty = parseInt(qtyValue.textContent);
+        // Initialize hidden fields from page display on load
+        (function initHiddenFieldsFromDisplay() {
+            hiddenFullName.value = displayName.textContent.trim();
+            hiddenAddress.value = displayAddress.innerText.trim();
+            hiddenPhone.value = displayAddrPhone.textContent.trim();
+        })();
 
-                if (this.querySelector('.fa-minus')) {
-                    if (currentQty > 1) {
-                        qtyValue.textContent = currentQty - 1;
-                    }
-                } else {
-                    qtyValue.textContent = currentQty + 1;
-                }
+        // Checkout button posts the hidden form (only place where actual POST happens)
+        checkoutSecureBtn.addEventListener('click', function (e) {
+            // optional validation - ensure address & phone are present
+            if (!hiddenAddress.value.trim() || !hiddenPhone.value.trim()) {
+                alert('Please add a valid delivery address and phone before checkout.');
+                // open modal so user can add it quickly
+                editAddressModal.show();
+                return;
+            }
+
+            // Optionally: attach cart info or other fields here before submit
+
+            // Submit the hidden realCheckoutForm => server will handle order creation & confirmation
+            realCheckoutForm.submit();
+        });
+
+        // ------------ QTY + REMOVE (front-end only) ------------
+        document.querySelectorAll('.qty-decrease').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const productItem = this.closest('.product-item');
+                // prefer the qty-value element that's within the same product-item
+                const qtySpans = productItem.querySelectorAll('.qty-value');
+                // If multiple .qty-value exist (meta + inline), choose the one inside quantity-control if present
+                let qtySpan = productItem.querySelector('.quantity-control .qty-value') || qtySpans[0];
+                let currentQty = parseInt(qtySpan.textContent) || 0;
+                if (currentQty > 1) qtySpan.textContent = currentQty - 1;
+            });
+        });
+
+        document.querySelectorAll('.qty-increase').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const productItem = this.closest('.product-item');
+                const qtySpans = productItem.querySelectorAll('.qty-value');
+                let qtySpan = productItem.querySelector('.quantity-control .qty-value') || qtySpans[0];
+                let currentQty = parseInt(qtySpan.textContent) || 0;
+                qtySpan.textContent = currentQty + 1;
             });
         });
 
@@ -659,6 +403,7 @@
             btn.addEventListener('click', function () {
                 if (confirm('Are you sure you want to remove this item?')) {
                     this.closest('.product-item').remove();
+                    // Optionally: you should also POST to server to update cart
                 }
             });
         });
