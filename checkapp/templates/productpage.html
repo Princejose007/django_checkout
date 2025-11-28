@@ -14,10 +14,29 @@
             padding: 20px;
         }
 
+        /* Logout Button Top Right */
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: #e60000;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #b30000;
+        }
+
         .product-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
+            margin-top: 60px;
         }
 
         .product-card {
@@ -83,35 +102,42 @@
 
 <body>
 
+    <!-- 🔹 Logout Button -->
+    <a href="{% url 'log_out_view' %}" class="logout-btn">Logout</a>
+
     <h2>Our Products</h2>
 
     <div class="product-container">
 
         <div class="product-card">
-            <a href="{% url 'single_product' 1 %}"><img src="{% static 'dress/dress1.jpeg' %}" alt=""></a>
+            <a href="{% url 'single_product' 1 %}">
+                <img src="{% static 'dress/dress1.jpeg' %}" alt="">
+            </a>
             <div class="product-name">Formal Shirts</div>
-            <div class="product-desc">Formal Full sleve Shirts for men.</div>
+            <div class="product-desc">Formal Full sleeve Shirts for men.</div>
             <div class="price">₹800</div>
             <button class="btn">Add to Cart</button>
         </div>
 
         <div class="product-card">
-            <a href="{% url 'single_product' 2 %}"><img src="{% static 'dress/dress2.jpeg' %}" alt=""></a>
+            <a href="{% url 'single_product' 2 %}">
+                <img src="{% static 'dress/dress2.jpeg' %}" alt="">
+            </a>
             <div class="product-name">Brasil jersey</div>
-            <div class="product-desc">Brasil jersey nilon</div>
+            <div class="product-desc">Brasil jersey nylon fabric.</div>
             <div class="price">₹500</div>
             <button class="btn">Add to Cart</button>
         </div>
 
-
         <div class="product-card">
-            <a href="{% url 'single_product' 3 %}"><img src="{% static 'dress/dress3.jpeg' %}" alt=""></a>
+            <a href="{% url 'single_product' 3 %}">
+                <img src="{% static 'dress/dress3.jpeg' %}" alt="">
+            </a>
             <div class="product-name">White shirt & green pant</div>
-            <div class="product-desc">White shirt & green pant casual fasion </div>
+            <div class="product-desc">Casual fashion combo set.</div>
             <div class="price">₹1600</div>
             <button class="btn">Add to Cart</button>
         </div>
-
 
     </div>
 

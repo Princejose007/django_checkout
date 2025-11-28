@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Login</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Login Page Unique Styles ===== */
+    .login-page-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .login-form-box {
+      background: #ffffff;
+      padding: 40px 35px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-form-box h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #243b55;
+      font-weight: 600;
+    }
+
+    .login-input-group {
+      margin-bottom: 20px;
+    }
+
+    .login-input-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .login-input-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .login-input-group input:focus {
+      border-color: #243b55;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #243b55;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover {
+      background: #141e30;
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-footer a {
+      color: #243b55;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .login-remember {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .login-remember input[type="checkbox"] {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-page-container">
+    <div class="login-form-box">
+      <h2>Welcome Back</h2>
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="login-input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="username" placeholder="Enter your email" required>
+        </div>
+
+        <div class="login-input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="login-remember">
+          <label><input type="checkbox" name="remember"> Remember me</label>
+          <a href="#" style="color:#243b55; text-decoration:none;">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+      <div class="login-footer">
+             Don't have an account?
+            <a href="{% url 'register_view' %}">Register</a>
+      </div>
+
+      </form>
+    </div>
+  </div>
+</body>
+</html>

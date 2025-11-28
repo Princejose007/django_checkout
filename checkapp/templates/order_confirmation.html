@@ -47,7 +47,16 @@
       display:flex;
       justify-content:space-between;
     }
-    .btns { display:flex; gap:12px; margin-top:18px; }
+    .btns {
+      display:flex;
+      flex-wrap: wrap;
+      gap:12px;
+      margin-top:18px;
+    }
+    .btns a,
+    .btns button {
+      flex:1 1 0;
+    }
   </style>
 </head>
 <body>
@@ -58,18 +67,18 @@
       <!-- HEADER -->
       <div class="d-flex align-items-center justify-content-between mb-3">
         
-        <!-- <div>
+        <div>
           <h1>
             <i class="fas fa-check-circle" style="color:#34c759;margin-right:8px"></i>
             Order Confirmed
           </h1>
           <div class="muted">Thanks — your order has been placed.</div>
-        </div> -->
+        </div>
 
         <div class="text-end muted">
-          {% if delivery %}
-            <div>Order Date: {{ delivery.created_at|date:"d M Y, H:i" }}</div>
-            <div>Order ID: {{ delivery.id }}</div>
+          {% if order %}
+            <div>Order Date: {{ order.order_date|date:"d M Y, H:i" }}</div>
+            <div>Order ID: {{ order.id }}</div>
           {% else %}
             <div>Order Date: -</div>
             <div>Order ID: -</div>
@@ -99,12 +108,12 @@
       <!-- ITEMS -->
       <h5>Items</h5>
 
-      {% if cart_items %}
-        {% for item in cart_items %}
+      {% if order_items %}
+        {% for item in order_items %}
           <div class="product-row">
 
-            {% if item.cartproduct.image %}
-              <img src="{{ item.cartproduct.image.url }}" class="product-image">
+            {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" class="product-image">
             {% else %}
               <div class="product-image d-flex align-items-center justify-content-center muted">
                 <i class="fas fa-box-open"></i>
@@ -112,12 +121,15 @@
             {% endif %}
 
             <div style="flex:1;">
-              <div style="font-weight:600">{{ item.cartproduct.name }}</div>
+              <div style="font-weight:600">{{ item.product.name }}</div>
               <div class="muted">Qty: {{ item.quantity }}</div>
             </div>
 
-            <div style="min-width:110px; text-align:right;">
-              ₹ {{ item.cartproduct.price|floatformat:2 }}
+            <div style="min-width:140px; text-align:right;">
+              <div>₹ {{ item.price|floatformat:2 }}</div>
+              <div class="muted" style="font-size:0.85rem;">
+                Line total: ₹ {{ item.total_cost|floatformat:2 }}
+              </div>
             </div>
 
           </div>
@@ -129,17 +141,59 @@
         </div>
 
       {% else %}
-        <p class="muted">No items found.</p>
+        <p class="muted">No items found for this order.</p>
       {% endif %}
 
       <!-- BUTTONS -->
       <div class="btns">
         <a href="{% url 'product_list' %}" class="btn btn-outline-primary">Continue Shopping</a>
         <a href="{% url 'cart_view' %}" class="btn btn-dark">View Cart</a>
+
+        {% if razorpay_order_id %}
+          <button id="pay-btn" class="btn btn-success">
+            Pay Now
+          </button>
+        {% endif %}
       </div>
 
     </div>
   </div>
+
+  {% if razorpay_order_id %}
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    var options = {
+      "key": "{{ razorpay_key_id }}",
+      "amount": "{{ razorpay_amount }}",  // in paise
+      "currency": "INR",
+      "name": "EliteStore",
+      "description": "Order #{{ order.id }}",
+      "order_id": "{{ razorpay_order_id }}",
+
+      // ✅ Now using full absolute URL passed from Django
+      "callback_url": "{{ callback_url }}",
+      "redirect": true,
+
+      "prefill": {
+        "name": "{{ delivery.Full_name|default:'' }}",
+        "contact": "{{ delivery.phone_number|default:'' }}"
+      },
+      "theme": {
+        "color": "#111111"
+      }
+    };
+
+    var rzp1 = new Razorpay(options);
+
+    var payBtn = document.getElementById("pay-btn");
+    if (payBtn) {
+      payBtn.onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+      };
+    }
+  </script>
+  {% endif %}
 
 </body>
 </html>

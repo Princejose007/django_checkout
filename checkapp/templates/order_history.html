@@ -1,0 +1,389 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order History</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f5f5f7;
+      --card-bg: #ffffff;
+      --text-main: #1d1d1f;
+      --text-muted: #6e6e73;
+      --accent: #0071e3;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --radius-lg: 18px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 12px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 980px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 24px;
+      padding: 18px 20px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    /* top bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mini-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #000000, #444444);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .title-main {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .title-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .top-right {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* heading row */
+    .header-row {
+      padding: 10px 4px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 6px;
+    }
+
+    .header-title {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .header-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* history list */
+    .history-list {
+      margin-top: 10px;
+    }
+
+    .history-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: var(--radius-lg);
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      margin-bottom: 10px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease;
+    }
+
+    .history-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.06);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .product-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f5f5f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .info-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .product-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .text-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .text-meta span + span::before {
+      content: "•";
+      margin: 0 5px;
+      color: #d2d2d7;
+    }
+
+    .status-pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #f5f5f7;
+      color: var(--text-muted);
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    .status-pill.paid {
+      border-color: rgba(0, 200, 80, 0.15);
+      background: rgba(0, 200, 80, 0.06);
+      color: #007a3a;
+    }
+
+    .status-pill.pending {
+      border-color: rgba(255, 186, 0, 0.25);
+      background: rgba(255, 214, 10, 0.08);
+      color: #7a4b00;
+    }
+
+    .status-pill.failed {
+      border-color: rgba(255, 59, 48, 0.25);
+      background: rgba(255, 59, 48, 0.08);
+      color: #b00020;
+    }
+
+    .info-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .amount {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .link-minimal {
+      font-size: 12px;
+      text-decoration: none;
+      color: var(--accent);
+      padding-bottom: 1px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s ease;
+    }
+
+    .link-minimal:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    /* empty state */
+    .empty-state {
+      padding: 30px 6px 10px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .empty-state strong {
+      color: var(--text-main);
+    }
+
+    .empty-btn {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      font-size: 12px;
+      text-decoration: none;
+      color: #fff;
+      background: var(--accent);
+    }
+
+    /* footer */
+    .footer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        border-radius: 18px;
+        padding: 14px 12px 16px;
+      }
+
+      .history-card {
+        grid-template-columns: auto 1fr;
+      }
+
+      .info-right {
+        align-items: flex-start;
+        text-align: left;
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- top bar -->
+    <header class="top-bar">
+      <div class="top-left">
+        <div class="mini-logo">E</div>
+        <div>
+          <div class="title-main">Order History</div>
+          <div class="title-sub">Your recent orders</div>
+        </div>
+      </div>
+      <div class="top-right">
+        Logged in as <strong>{{ request.user.username }}</strong>
+      </div>
+    </header>
+
+    <!-- header text -->
+    <section class="header-row">
+      <h1 class="header-title">Your products.</h1>
+      <p class="header-sub">
+        Minimal view of what you’ve ordered so far — items, date, status, and total.
+      </p>
+    </section>
+
+    <!-- history list -->
+    <section class="history-list">
+      {% if orders %}
+        {% for order in orders %}
+          {% with first_item=order.items.all.0 %}
+          <article class="history-card">
+            <!-- thumbnail -->
+            <div class="product-thumb">
+              {% if first_item and first_item.product.image %}
+                <img src="{{ first_item.product.image.url }}" alt="{{ first_item.product.name }}">
+              {% elif first_item %}
+                {{ first_item.product.name|slice:":2" }}
+              {% else %}
+                --
+              {% endif %}
+            </div>
+
+            <!-- main info -->
+            <div class="info-main">
+              <div class="product-name">
+                {% if first_item %}
+                  {{ first_item.product.name }}
+                  {% if order.items.count > 1 %}
+                    (+{{ order.items.count|add:"-1" }} more)
+                  {% endif %}
+                {% else %}
+                  Order #{{ order.id }}
+                {% endif %}
+              </div>
+
+              <div class="text-meta">
+                <span>Order #{{ order.id }}</span>
+                <span>{{ order.order_date|date:"d M Y" }}</span>
+                <span>{{ order.total_quantity }} item{{ order.total_quantity|pluralize }}</span>
+              </div>
+
+              <span class="status-pill
+                {% if order.status|lower == 'paid' %}paid
+                {% elif order.status|lower == 'pending' %}pending
+                {% elif order.status|lower == 'payment failed' or order.status|lower == 'failed' %}failed
+                {% endif %}">
+                {{ order.status }}
+              </span>
+            </div>
+
+            <!-- right info -->
+            <div class="info-right">
+              <div class="amount">₹{{ order.total_price }}</div>
+              <!-- Later you can replace # with an order_detail URL -->
+              <a href="#" class="link-minimal">
+                View details →
+              </a>
+            </div>
+          </article>
+          {% endwith %}
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <p>
+            <strong>No orders yet.</strong><br>
+            When you buy something, it will appear here.
+          </p>
+          <a href="{% url 'product_list' %}" class="empty-btn">
+            Start shopping →
+          </a>
+        </div>
+      {% endif %}
+    </section>
+
+    <footer class="footer">
+      <span>Simple, clean order history — nothing extra.</span>
+      <span>Last updated · {% now "d M Y, H:i" %}</span>
+    </footer>
+  </main>
+</body>
+</html>
